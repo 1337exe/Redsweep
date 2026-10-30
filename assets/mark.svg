@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Lowtide mark">
+  <rect width="128" height="128" rx="28" fill="#0b2a3a"/>
+  <line x1="18" y1="38" x2="110" y2="38" stroke="#f2d6a2" stroke-width="4" stroke-dasharray="9 7" stroke-linecap="round"/>
+  <path d="M18 66c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round"/>
+  <path d="M18 88c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round" opacity=".55"/>
+  <path d="M18 108c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round" opacity=".28"/>
+</svg>

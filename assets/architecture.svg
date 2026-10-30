@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 540" role="img" aria-label="How Lowtide works: your tools feed the guards, the guards write to a hash-chained journal, and the journal produces the closeout gate, SITREPs, purple review and a sealed pack.">
+  <style>
+    :root{--bg:#ffffff;--ink:#0b2a3a;--mut:#4f6b78;--box:#eef6f7;--line:#b8d0d6;--acc:#1c9d90;--warn:#c7861a;--hot:#a1262b}
+    @media (prefers-color-scheme:dark){:root{--bg:#0c171c;--ink:#e8f4f6;--mut:#9bb8c3;--box:#13262e;--line:#2b4650;--acc:#35c2b4;--warn:#f2c14e;--hot:#ff8a80}}
+    .t{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:var(--ink)}
+    .s{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:var(--mut)}
+    .b{fill:var(--box);stroke:var(--line);stroke-width:1.5}
+    .a{stroke:var(--acc);stroke-width:2.2;fill:none;marker-end:url(#h)}
+    .j{fill:var(--box);stroke:var(--acc);stroke-width:2.5}
+  </style>
+  <defs><marker id="h" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1c9d90"/></marker></defs>
+  <rect width="980" height="540" fill="var(--bg)"/>
+  <text x="30" y="40" class="t" font-size="22" font-weight="700">How Lowtide works</text>
+  <text x="30" y="62" class="s" font-size="14">Every action goes through the guards, is written once, and is never edited. Everything else is rebuilt from that record.</text>
+
+  <text x="30" y="104" class="s" font-size="13" font-weight="700">1  YOUR TOOLS</text>
+  <rect class="b" x="30" y="116" width="210" height="52" rx="10"/><text x="46" y="138" class="t" font-size="14">Cobalt Strike logs</text><text x="46" y="156" class="s" font-size="12">lowtide import</text>
+  <rect class="b" x="30" y="184" width="210" height="52" rx="10"/><text x="46" y="206" class="t" font-size="14">Ghostwriter / CSV</text><text x="46" y="224" class="s" font-size="12">import and export</text>
+  <rect class="b" x="30" y="252" width="210" height="52" rx="10"/><text x="46" y="274" class="t" font-size="14">Any command you run</text><text x="46" y="292" class="s" font-size="12">lowtide wrap -- cmd</text>
+  <rect class="b" x="30" y="320" width="210" height="52" rx="10"/><text x="46" y="342" class="t" font-size="14">An AI agent</text><text x="46" y="360" class="s" font-size="12">MCP server, no shell access</text>
+  <rect class="b" x="30" y="388" width="210" height="52" rx="10"/><text x="46" y="410" class="t" font-size="14">Blue team timeline</text><text x="46" y="428" class="s" font-size="12">feeds the purple review</text>
+
+  <path class="a" d="M244 142H292"/><path class="a" d="M244 210H292"/><path class="a" d="M244 278H292"/><path class="a" d="M244 346H292"/>
+
+  <text x="300" y="104" class="s" font-size="13" font-weight="700">2  THE GUARDS</text>
+  <rect class="b" x="296" y="116" width="226" height="324" rx="12"/>
+  <text x="314" y="146" class="t" font-size="14" font-weight="600">Scope and time window</text><text x="314" y="165" class="s" font-size="12">in, out, or unlisted (unlisted = no)</text>
+  <text x="314" y="199" class="t" font-size="14" font-weight="600">Forbidden actions</text><text x="314" y="218" class="s" font-size="12">named in the rules of engagement</text>
+  <text x="314" y="252" class="t" font-size="14" font-weight="600">Original value first</text><text x="314" y="271" class="s" font-size="12">no change without a saved original</text>
+  <text x="314" y="305" class="t" font-size="14" font-weight="600">Freeze and stop</text><text x="314" y="324" class="s" font-size="12">only the Control Team can resume</text>
+  <text x="314" y="358" class="t" font-size="14" font-weight="600">Tripwires</text><text x="314" y="377" class="s" font-size="12">outside parties need a decision first</text>
+  <text x="314" y="411" class="t" font-size="14" font-weight="600">Secrets become fingerprints</text><text x="314" y="430" class="s" font-size="12">never stored as text</text>
+
+  <path class="a" d="M526 278H574"/>
+
+  <text x="582" y="104" class="s" font-size="13" font-weight="700">3  THE RECORD</text>
+  <rect class="j" x="578" y="116" width="168" height="196" rx="12"/>
+  <text x="594" y="146" class="t" font-size="15" font-weight="700">Journal</text>
+  <text x="594" y="168" class="s" font-size="12">one file per operator</text>
+  <text x="594" y="186" class="s" font-size="12">each line hashes the last</text>
+  <text x="594" y="204" class="s" font-size="12">append only, never edited</text>
+  <text x="594" y="236" class="t" font-size="13">ledger · log · creds</text>
+  <text x="594" y="256" class="t" font-size="13">evidence · decisions</text>
+  <text x="594" y="276" class="t" font-size="13">SITREPs · detections</text>
+  <rect class="b" x="578" y="332" width="168" height="108" rx="12"/>
+  <text x="594" y="362" class="t" font-size="15" font-weight="700">State</text>
+  <text x="594" y="384" class="s" font-size="12">replayed from the journal</text>
+  <text x="594" y="402" class="s" font-size="12">on every command, so two</text>
+  <text x="594" y="420" class="s" font-size="12">operators never disagree</text>
+  <path class="a" d="M662 316V328"/>
+
+  <path d="M750 214H774M774 144V416" class="a" style="marker-end:none"/>
+  <path class="a" d="M774 144H798"/><path class="a" d="M774 212H798"/><path class="a" d="M774 280H798"/><path class="a" d="M774 348H798"/><path class="a" d="M774 416H798"/>
+  <text x="806" y="104" class="s" font-size="13" font-weight="700">4  WHAT YOU GET</text>
+  <rect class="b" x="802" y="116" width="150" height="56" rx="10"/><text x="816" y="140" class="t" font-size="14" font-weight="600">Closeout gate</text><text x="816" y="158" class="s" font-size="12">refuses until clean</text>
+  <rect class="b" x="802" y="184" width="150" height="56" rx="10"/><text x="816" y="208" class="t" font-size="14" font-weight="600">SITREP</text><text x="816" y="226" class="s" font-size="12">built from the log</text>
+  <rect class="b" x="802" y="252" width="150" height="56" rx="10"/><text x="816" y="276" class="t" font-size="14" font-weight="600">Purple review</text><text x="816" y="294" class="s" font-size="12">what blue saw, in UTC</text>
+  <rect class="b" x="802" y="320" width="150" height="56" rx="10"/><text x="816" y="344" class="t" font-size="14" font-weight="600">Navigator layer</text><text x="816" y="362" class="s" font-size="12">ATT&amp;CK layer, scored</text>
+  <rect class="b" x="802" y="388" width="150" height="56" rx="10"/><text x="816" y="412" class="t" font-size="14" font-weight="600">Sealed pack</text><text x="816" y="430" class="s" font-size="12">anyone can verify it</text>
+  <path class="a" d="M750 214H798"/>
+
+  <text x="30" y="486" class="t" font-size="14" font-weight="600">The rule the whole tool is built on:</text>
+  <text x="30" y="508" class="s" font-size="14">a change is not undone until you have read the state back and it matches what it was before. Saying "done" does not count.</text>
+</svg>

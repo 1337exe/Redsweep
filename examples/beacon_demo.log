@@ -1,0 +1,13 @@
+10/03 09:12:44 UTC [input] <alice> sleep 60 20
+10/03 09:12:45 UTC [task] Tasked beacon to sleep for 60s (20% jitter)
+10/03 09:15:02 UTC [input] <alice> pwd
+10/03 09:15:03 UTC [output]
+received output:
+C:\Users\Public
+10/03 09:16:30 UTC [input] <alice> ls C:\Users\Public
+10/03 09:16:31 UTC [output]
+received output:
+list of files
+10/03 09:18:09 UTC [input] <alice> shell hostname
+10/03 09:18:10 UTC [error] could not run: access is denied
+10/03 09:21:55 UTC [input] <bob> upload notes.txt

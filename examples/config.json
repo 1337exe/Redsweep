@@ -1,0 +1,9 @@
+{
+  "name": "EXAMPLE-1",
+  "client": "Example Corp",
+  "strict_scope": true,
+  "require_second_operator": true,
+  "min_verify_strength": "manual",
+  "assumption_stop_after": 2,
+  "sitrep_requires_log": true
+}

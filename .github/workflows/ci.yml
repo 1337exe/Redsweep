@@ -1,0 +1,32 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: { python: ["3.10", "3.11", "3.12", "3.13"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+      - run: lowtide doctor
+      - run: lowtide selftest
+      - name: build the wheel and run the kit from a clean venv
+        run: |
+          python -m build --wheel
+          python -m venv /tmp/clean && /tmp/clean/bin/pip install dist/*.whl
+          /tmp/clean/bin/lowtide selftest
+  windows:
+    # Windows support is experimental: steps that need a POSIX shell are skipped.
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest -q
+      - run: lowtide selftest

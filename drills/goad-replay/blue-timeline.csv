@@ -1,0 +1,6 @@
+time,host,source,summary,level
+2026-10-30T09:14:05Z,winterfell,Security-4625,An account failed to log on. (account: vagrant),L1
+2026-10-30T09:22:04Z,kingslanding,Security-4720,A user account was created. (account: lt-test),L1
+2026-10-30T09:25:00Z,kingslanding,SOC,account created outside the change window; ticket opened,L3
+2026-10-30T09:48:03Z,kingslanding,Security-4726,A user account was deleted. (account: lt-test),L1
+2026-10-30T11:00:12Z,winterfell,Security-4625,An account failed to log on. (account: svc-backup),L1

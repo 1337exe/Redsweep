@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lowtide"
+version = "0.1.0"
+description = "Leave nothing behind, and prove it. Change ledger, rollback verifier and control-team kit for red team engagements."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "1337exe" }]
+keywords = ["red-team", "pentest", "opsec", "ledger", "rollback", "tiber-eu", "dora", "purple-team", "mcp"]
+classifiers = ["Topic :: Security", "Intended Audience :: Information Technology", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "build"]
+
+[project.urls]
+Homepage = "https://github.com/1337exe/lowtide"
+Issues = "https://github.com/1337exe/lowtide/issues"
+
+[project.scripts]
+lowtide = "lowtide.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

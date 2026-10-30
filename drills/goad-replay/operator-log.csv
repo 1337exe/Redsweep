@@ -1,0 +1,9 @@
+time,operator,host,class,result,text
+2026-10-30T09:00:10Z,alpha,kingslanding.sevenkingdoms.local,ldap-bulk-query,ok,list the directory users
+2026-10-30T09:06:20Z,alpha,castelblack.north.sevenkingdoms.local,network-logon,ok,list the file shares
+2026-10-30T09:14:00Z,alpha,winterfell.north.sevenkingdoms.local,network-logon,fail,one logon with a wrong password (a deliberate test of alerting)
+2026-10-30T09:22:00Z,alpha,kingslanding.sevenkingdoms.local,user-add,ok,create the test user lt-test
+2026-10-30T09:30:30Z,bravo,kingslanding.sevenkingdoms.local,ldap-bulk-query,ok,read the group list of lt-test
+2026-10-30T09:48:00Z,alpha,kingslanding.sevenkingdoms.local,,ok,remove the test user lt-test
+2026-10-30T10:05:15Z,bravo,castelblack.north.sevenkingdoms.local,powershell,ok,read the service state
+2026-10-30T10:20:40Z,bravo,castelblack.north.sevenkingdoms.local,network-logon,ok,log on with the lab admin account to check a setting

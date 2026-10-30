@@ -1,0 +1,9 @@
+{
+  "engagement": "EXAMPLE-1",
+  "window": { "start": "2026-10-01T00:00:00Z", "end": "2026-12-31T23:59:59Z" },
+  "in_scope": { "hosts": ["*.lab.example", "10.99.0.0/16"], "cloud_projects": ["example-dev"], "accounts": [] },
+  "out_of_scope": ["*.mdr-provider.example", "10.99.250.0/24"],
+  "forbidden_actions": ["payment-approval-click", "denial-of-service", "real-data-exfil"],
+  "roles": { "control_team": ["pat", "robin"], "red_lead": ["alex"] },
+  "tripwires": ["external_party", "production_containment", "exec_crisis"]
+}

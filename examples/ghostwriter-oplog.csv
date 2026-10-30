@@ -1,0 +1,3 @@
+start_date,end_date,source_ip,dest_ip,tool,user_context,command,description,output,comments,operator_name
+2026-10-03 09:30:00,2026-10-03 09:30:05,10.99.0.5,10.99.1.20,curl,,curl -s http://10.99.1.20/status,checked the status page,,,alice
+2026-10-03 09:41:10,2026-10-03 09:41:12,10.99.0.5,10.99.1.20,curl,,curl -s http://10.99.1.20/admin,tried the admin page,,got 403,alice
