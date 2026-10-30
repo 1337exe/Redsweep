@@ -110,37 +110,63 @@ More detail and examples: [docs/integrations.md](docs/integrations.md).
 
 ## Case studies
 
-Two kinds, labelled honestly: what we **studied** and what it became, and what we **measured** by running the tool.
+Each one says where it comes from. **Public incident or report:** read from the linked source and checked against a feature. **Practitioner write-up:** the same, from a blog post.
+**Measured:** we ran Lowtide and counted. **Demo or synthetic:** made-up or replayed data, said so each time. Nobody named in a source has reviewed Lowtide.
 
-**1. "The beacon goes quiet on day 38." Studied:** a public, fictional decision exercise on handling a detected red team engagement
+### From public incidents and reports
+
+**1. "A forgotten test account." Public incident:** Microsoft's January 2024 write-up on a nation-state intrusion says the attackers used password spray to compromise
+"a legacy, non-production test tenant account that did not have multifactor authentication (MFA) enabled"
+([Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2024/01/25/midnight-blizzard-guidance-for-responders-on-nation-state-attack/)).
+That was not a red team's account, but it shows what happens to a test account nobody owns any more. Any account a red team creates is the same kind of object.
+**Became:** `change add --kind account --created` records that the account did not exist before; closeout stays blocked until a read-back shows it gone, and the teardown list puts accounts before configuration.
+
+**2. "Three months, and nobody saw us." Public report:** CISA's advisory on its 2022 red team assessment of a federal civilian agency
+([AA23-059A](https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-059a)) says the organization "did not detect the red team's activity throughout the assessment."
+Of 13 measurable events in the second phase, only two drew any response (users reported one; antivirus removed one file). Lateral movement, persistence and command-and-control went unseen across intrusion detection, endpoint protection, proxy and Windows event logs.
+**Became:** `lowtide review` lists the actions blue never saw ("replay these paths with blue"), the three most expensive actions seen, and blue events no action explains; `lowtide navigator` colours an ATT&CK layer by what was seen.
+
+**3. "The signed letter was not enough." Public incident:** two Coalfire testers were arrested at a county courthouse in Iowa in 2019. In their own account
+([Dark Reading](https://www.darkreading.com/vulnerabilities-threats/pen-testers-who-got-arrested-doing-their-jobs-tell-all)) they carried an authorisation letter from the state judicial branch, the sheriff said the courthouse belonged to the county,
+their client later said they were not meant to test those systems, and the scoping call had not been recorded. Their advice includes recording calls and a tight contract; the state later required legal review and coordination with law enforcement.
+**Became:** the scope file holds in-scope, out-of-scope, a window and forbidden actions in one place; out-of-scope beats in-scope; an unlisted target is refused; `--scope-override` must say who approved and why, and shows up in the closeout.
+Lowtide enforces what the scope says. Whether the person who signed it had the authority is still a human question.
+
+**4. "The White Team can freeze the test." Public framework:** the ECB's TIBER-EU purple teaming best practices (July 2022)
+([PDF, hosted by De Nederlandsche Bank](https://www.dnb.nl/media/5mgnzq2p/tiber-eu-purple-teaming-best-practices.pdf)) say the White Team (the Control Team in Lowtide's words) can instruct a freeze on red team activities,
+that if the blue team has involved external parties and cannot be stopped the test "should be halted immediately", and that limited purple teaming during a test needs a proposal from the White Team.
+**Became:** `freeze`, `stop` with named conditions, the `external_party` tripwire, the `limited-purple` decision option, and `resume` that only a Control Team member can run.
+
+### From practitioner write-ups
+
+**5. "The beacon goes quiet on day 38." Studied:** a public, fictional decision exercise on handling a detected red team engagement
 ([gikaku.net](https://gikaku.net/2026/10/25/red-team-engagement-detected/)). Its lessons are freeze first, diagnose second; list what keeps running with no operator;
 base the report on operator logs; the red team recommends and the Control Team decides. **Became:** `freeze`, the autonomous list taken from the ledger, `sitrep --based-on`,
 `recommend` / `decide`, stop conditions, tripwires.
 
-**2. "The rollback said done." Measured:** in the live lab, an account was created in two files and the stored rollback command fixed only one.
-`change rollback --run --verify` returned `MISMATCH` and closeout stayed blocked until the second file was fixed. Nothing in the operator's own log would have shown it.
-
-**3. "Out of scope by one address." Measured:** in the lab, a command aimed at `169.254.169.254` (listed out of scope) was refused before it ran and nothing was logged as done.
-The same check blocks an unlisted host, a date outside the window and a forbidden action class.
-
-**4. "The role was reverted but the control stayed." Studied:** a public write-up on GCP privilege paths
+**6. "The role was reverted but the control stayed." Studied:** a public write-up on GCP privilege paths
 ([gikaku.net](https://gikaku.net/2026/10/17/gcp-red-team-08/)): rolling a role back removes the temporary state but not the grant that let you change it.
 **Became:** `change rollback --durable "..."`, which lands in the closeout report and the client handoff list.
 
-**5. "Three clocks on one credential." Studied:** a public write-up on credential movement across cloud projects
+**7. "Three clocks on one credential." Studied:** a public write-up on credential movement across cloud projects
 ([gikaku.net](https://gikaku.net/2026/10/24/gcp-red-team-09/)): the key file, the issued token and the permission each end differently, and disabling a key does not cancel tokens already issued.
 **Became:** credential families with their own containment steps, a token window computed from the latest possible issue time, and a closeout that waits for it.
-
-**6. "The joint review." Demo (made-up data):** `lowtide demo` builds a fictional engagement with a blue timeline. `lowtide review` shows which action the EDR caught within 12 minutes,
-which actions nobody saw, and a blue event no red action explains. `lowtide navigator` turns it into an ATT&CK layer.
-
-**7. "The agent that tried an out-of-scope host." Measured:** in the test kit an MCP client asked to log an action against an unlisted host and got a refusal with the reason, not a silent success.
 
 **8. "A log that only has wins." Studied:** public OPSEC write-ups
 ([gikaku.net](https://gikaku.net/2026/10/17/crto-opsec/)) warn that a log recording only successes cannot be checked. **Became:** closeout warns after ten actions with no recorded failure,
 and warns when the same assumption fails twice with nothing new learned.
 
-**9. "Two operators, one machine." Measured (local drill, Linux):** [`drills/local-two-operator`](drills/local-two-operator) (`python drill.py`, Linux or Windows) runs two operators and a Control Team against a real local web app, a real listener
+### Measured by running Lowtide
+
+**9. "The rollback said done." Measured:** in the live lab, an account was created in two files and the stored rollback command fixed only one.
+`change rollback --run --verify` returned `MISMATCH` and closeout stayed blocked until the second file was fixed. Nothing in the operator's own log would have shown it.
+
+**10. "Out of scope by one address." Measured:** in the lab, a command aimed at `169.254.169.254` (listed out of scope) was refused before it ran and nothing was logged as done.
+The same check blocks an unlisted host, a date outside the window and a forbidden action class.
+
+**11. "The agent that tried an out-of-scope host." Measured:** in the test kit an MCP client asked to log an action against an unlisted host and got a refusal with the reason, not a silent success.
+
+**12. "Two operators, one machine." Measured (local drill, Linux):** [`drills/local-two-operator`](drills/local-two-operator) (`python drill.py`, Linux or Windows) runs two operators and a Control Team against a real local web app, a real listener
 and, with `--system`, a real local user account, all on `127.0.0.x`. A small stand-in detector (three rules, written for the drill; it is not a SIEM) plays blue. One run produced:
 5 actions, 2 seen by blue (the new user, L3 after a staged escalation; the new listener, L1) and 3 not seen (two config calls, one hosts-file edit on a host blue did not watch);
 an out-of-scope command refused before it ran; a command refused while frozen;
@@ -149,11 +175,16 @@ and a pack that verified. With `--system`: 6 actions, 3 seen (L1, L2, L3), the r
 The drill ran the same way on Windows 11 (Python 3.12): 13 of 13 checks as expected and 2 of 5 actions seen, as on Linux (the detector was slower there: the listener alert came 6 s after the action instead of 0 s). The drill (with its first Windows run) also found three bugs in Lowtide, now fixed with tests: `wrap` stamped an action when it finished instead of when it started, `review` credited one alert to every earlier action, and `review` treated two different IP addresses with the same first number as the same host.
 This is a drill on one machine, not a live engagement.
 
-**10. "GOAD-shaped replay." Synthetic (not run on GOAD):** [`drills/goad-replay`](drills/goad-replay) replays a made-up log and a blue timeline in the Windows Security-log export format
+### Demo and synthetic data
+
+**13. "The joint review." Demo (made-up data):** `lowtide demo` builds a fictional engagement with a blue timeline. `lowtide review` shows which action the EDR caught within 12 minutes,
+which actions nobody saw, and a blue event no red action explains. `lowtide navigator` turns it into an ATT&CK layer.
+
+**14. "GOAD-shaped replay." Synthetic (not run on GOAD):** [`drills/goad-replay`](drills/goad-replay) replays a made-up log and a blue timeline in the Windows Security-log export format
 (event IDs 4625, 4720, 4726), with host names from GOAD's published layout. Result: 3 of 8 actions seen (a wrong-password logon, the test user's creation at L3 after a SOC ticket, its removal), 5 not seen,
 and one blue event no action explains. It found one more bug, now fixed: `review` ignored failed attempts, so the wrong-password logon looked like blue activity with no cause. A run on the real range is still to do.
 
-**11. "Real Windows events, synthetic operator." Measured on public data:** [`drills/evtx-replay`](drills/evtx-replay) fetches three small files from the public EVTX-ATTACK-SAMPLES set (real Security events: account creation 4720,
+**15. "Real Windows events, synthetic operator." Measured on public data:** [`drills/evtx-replay`](drills/evtx-replay) fetches three small files from the public EVTX-ATTACK-SAMPLES set (real Security events: account creation 4720,
 logons 4624 and 4625, group enumeration 4798 and 4799) and converts them to Lowtide's blue timeline. The operator log beside them is made up to match the timestamps. Result: 5 of 6 actions seen (all at L0, raw telemetry), one not seen.
 It showed that the blue-timeline format works on real exported Windows events and what a real computer-account creation (event 4720) looks like to the review. It is not GOAD and not a live engagement.
 
