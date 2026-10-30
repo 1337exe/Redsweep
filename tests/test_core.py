@@ -8,7 +8,7 @@ import threading
 import zipfile
 import pytest
 
-needs_gpg = pytest.mark.skipif(not shutil.which('gpg'), reason='gpg not installed')
+needs_gpg = pytest.mark.skipif(not shutil.which('gpg') or os.name == 'nt', reason='gpg not installed (or Windows, where gpg signing is untested)')
 
 from lowtide import importers, pricing, review, seal
 from lowtide.cli import main
@@ -481,7 +481,7 @@ def test_import_map_errors(eng, tmp_path):
 # ---------- gpg signing
 @needs_gpg
 def test_gpg_signed_pack_roundtrip_and_tamper(eng, tmp_path):
-    gh = tempfile.mkdtemp(prefix="g", dir="/tmp")
+    gh = tempfile.mkdtemp(prefix="g", dir="/tmp" if os.path.isdir("/tmp") else None)  # a short path keeps gpg-agent sockets valid
     env = dict(os.environ, GNUPGHOME=gh)
     os.chmod(gh, 0o700)
     subprocess.run(["gpg", "--batch", "--passphrase", "", "--quick-generate-key", "lt@example.com", "default", "default", "never"], env=env, capture_output=True, check=True)
