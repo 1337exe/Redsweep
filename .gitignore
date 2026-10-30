@@ -4,6 +4,6 @@ __pycache__/
 dist/
 build/
 .pytest_cache/
-.lowtide/
-lowtide-demo/
-lowtide-lab/
+.redsweep/
+redsweep-demo/
+redsweep-lab/

@@ -1,22 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 540" role="img" aria-label="How Lowtide works: your tools feed the guards, the guards write to a hash-chained journal, and the journal produces the closeout gate, SITREPs, purple review and a sealed pack.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 540" role="img" aria-label="How Redsweep works: your tools feed the guards, the guards write to a hash-chained journal, and the journal produces the closeout gate, SITREPs, purple review and a sealed pack.">
   <style>
-    :root{--bg:#ffffff;--ink:#0b2a3a;--mut:#4f6b78;--box:#eef6f7;--line:#b8d0d6;--acc:#1c9d90;--warn:#c7861a;--hot:#a1262b}
-    @media (prefers-color-scheme:dark){:root{--bg:#0c171c;--ink:#e8f4f6;--mut:#9bb8c3;--box:#13262e;--line:#2b4650;--acc:#35c2b4;--warn:#f2c14e;--hot:#ff8a80}}
+    :root{--bg:#ffffff;--ink:#14161b;--mut:#5a606b;--box:#f6f1f1;--line:#dccaca;--acc:#d93636;--warn:#b7791f;--hot:#a1262b}
+    @media (prefers-color-scheme:dark){:root{--bg:#0f1115;--ink:#f2f2f4;--mut:#a3a8b3;--box:#191c23;--line:#343944;--acc:#ff5a5f;--warn:#f2c14e;--hot:#ff8a80}}
     .t{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:var(--ink)}
     .s{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:var(--mut)}
     .b{fill:var(--box);stroke:var(--line);stroke-width:1.5}
     .a{stroke:var(--acc);stroke-width:2.2;fill:none;marker-end:url(#h)}
     .j{fill:var(--box);stroke:var(--acc);stroke-width:2.5}
   </style>
-  <defs><marker id="h" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1c9d90"/></marker></defs>
+  <defs><marker id="h" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#d93636"/></marker></defs>
   <rect width="980" height="540" fill="var(--bg)"/>
-  <text x="30" y="40" class="t" font-size="22" font-weight="700">How Lowtide works</text>
+  <text x="30" y="40" class="t" font-size="22" font-weight="700">How Redsweep works</text>
   <text x="30" y="62" class="s" font-size="14">Every action goes through the guards, is written once, and is never edited. Everything else is rebuilt from that record.</text>
 
   <text x="30" y="104" class="s" font-size="13" font-weight="700">1  YOUR TOOLS</text>
-  <rect class="b" x="30" y="116" width="210" height="52" rx="10"/><text x="46" y="138" class="t" font-size="14">Cobalt Strike logs</text><text x="46" y="156" class="s" font-size="12">lowtide import</text>
+  <rect class="b" x="30" y="116" width="210" height="52" rx="10"/><text x="46" y="138" class="t" font-size="14">Cobalt Strike logs</text><text x="46" y="156" class="s" font-size="12">redsweep import</text>
   <rect class="b" x="30" y="184" width="210" height="52" rx="10"/><text x="46" y="206" class="t" font-size="14">Ghostwriter / CSV</text><text x="46" y="224" class="s" font-size="12">import and export</text>
-  <rect class="b" x="30" y="252" width="210" height="52" rx="10"/><text x="46" y="274" class="t" font-size="14">Any command you run</text><text x="46" y="292" class="s" font-size="12">lowtide wrap -- cmd</text>
+  <rect class="b" x="30" y="252" width="210" height="52" rx="10"/><text x="46" y="274" class="t" font-size="14">Any command you run</text><text x="46" y="292" class="s" font-size="12">redsweep wrap -- cmd</text>
   <rect class="b" x="30" y="320" width="210" height="52" rx="10"/><text x="46" y="342" class="t" font-size="14">An AI agent</text><text x="46" y="360" class="s" font-size="12">MCP server, no shell access</text>
   <rect class="b" x="30" y="388" width="210" height="52" rx="10"/><text x="46" y="410" class="t" font-size="14">Blue team timeline</text><text x="46" y="428" class="s" font-size="12">feeds the purple review</text>
 

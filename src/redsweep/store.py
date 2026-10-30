@@ -82,7 +82,7 @@ def _chain(prev: str, body: dict) -> str:
 
 class Store:
     def __init__(self, home=None):
-        self.home = Path(home or os.environ.get("LOWTIDE_HOME") or ".lowtide")
+        self.home = Path(home or os.environ.get("REDSWEEP_HOME") or ".redsweep")
 
     # ---- layout
     @property
@@ -102,7 +102,7 @@ class Store:
 
     def require(self):
         if not self.exists():
-            raise StoreError(f"no engagement at {self.home}. Run `lowtide init` first (or set LOWTIDE_HOME / --home).")
+            raise StoreError(f"no engagement at {self.home}. Run `redsweep init` first (or set REDSWEEP_HOME / --home).")
 
     # ---- config
     def cfg(self) -> dict:
@@ -119,7 +119,7 @@ class Store:
         return c
 
     def operator(self, override=None) -> str:
-        op = override or os.environ.get("LOWTIDE_OPERATOR") or self.cfg().get("default_operator") or os.environ.get("USER") or "operator"
+        op = override or os.environ.get("REDSWEEP_OPERATOR") or self.cfg().get("default_operator") or os.environ.get("USER") or "operator"
         if not OP_RE.match(op):
             raise StoreError(f"operator name {op!r} must be 1-32 characters from A-Z a-z 0-9 _ . -")
         return op

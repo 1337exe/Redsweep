@@ -1,11 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 150" role="img" aria-label="Lowtide: leave nothing behind, and prove it">
-  <g transform="translate(14 11) scale(1)">
-    <rect width="128" height="128" rx="28" fill="#0b2a3a"/>
-    <line x1="18" y1="38" x2="110" y2="38" stroke="#f2d6a2" stroke-width="4" stroke-dasharray="9 7" stroke-linecap="round"/>
-    <path d="M18 66c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round"/>
-    <path d="M18 88c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round" opacity=".55"/>
-    <path d="M18 108c14-12 24-12 36 0s24 12 36 0 14-9 20-6" fill="none" stroke="#35c2b4" stroke-width="7" stroke-linecap="round" opacity=".28"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 150" role="img" aria-label="Redsweep: sweep the engagement clean, and prove it">
+  <g transform="translate(14 11)">
+  <rect width="128" height="128" rx="28" fill="#12141a"/>
+  <circle cx="64" cy="64" r="46" fill="none" stroke="#2b303b" stroke-width="2.5"/>
+  <circle cx="64" cy="64" r="31" fill="none" stroke="#2b303b" stroke-width="2.5"/>
+  <circle cx="64" cy="64" r="16" fill="none" stroke="#2b303b" stroke-width="2.5"/>
+  <line x1="64" y1="14" x2="64" y2="114" stroke="#2b303b" stroke-width="1.5"/><line x1="14" y1="64" x2="114" y2="64" stroke="#2b303b" stroke-width="1.5"/>
+  <path d="M64 64 L99.2 34.4 A46 46 0 0 1 107.2 48.3 Z" fill="#ff4d52" opacity="0.85"/><path d="M64 64 L87.0 24.2 A46 46 0 0 1 99.2 34.4 Z" fill="#ff4d52" opacity="0.5"/><path d="M64 64 L72.0 18.7 A46 46 0 0 1 87.0 24.2 Z" fill="#ff4d52" opacity="0.26"/><path d="M64 64 L56.0 18.7 A46 46 0 0 1 72.0 18.7 Z" fill="#ff4d52" opacity="0.1"/>
+  <line x1="64" y1="64" x2="107.2" y2="48.3" stroke="#ff4d52" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="64" cy="64" r="5.5" fill="#ff4d52"/>
+  <path d="M84 98l7 7 13-15" fill="none" stroke="#f2f2f4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <text x="168" y="82" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="64" font-weight="700" letter-spacing="-1" fill="#0b2a3a">lowtide</text>
-  <text x="170" y="116" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="21" fill="#4f6b78">leave nothing behind, and prove it</text>
+  <text x="168" y="82" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="64" font-weight="700" letter-spacing="-1"><tspan fill="#ff4d52">red</tspan><tspan fill="#14161b">sweep</tspan></text>
+  <text x="170" y="116" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="21" fill="#5a606b">sweep the engagement clean, and prove it</text>
 </svg>

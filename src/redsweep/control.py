@@ -39,7 +39,7 @@ def build_sitrep(eng: Engagement, status, observed, assessed="", ask="", risk=""
         cited.append(hit[0])
     if eng.cfg.get("sitrep_requires_log") and not cited:
         raise OpsError("a SITREP must rest on operator log entries. Cite them with --based-on A-xxxxx[,A-yyyyy] "
-                       "(see `lowtide log --list`), so the report matches what was actually done.")
+                       "(see `redsweep log --list`), so the report matches what was actually done.")
     if not observed or not ask:
         raise OpsError("a SITREP needs --observed and --ask (what do you need from the Control Team?)")
     n = len(st.sitreps) + 1

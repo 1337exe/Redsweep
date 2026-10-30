@@ -1,4 +1,4 @@
-"""Seal and pack. A seal fixes the journal heads and the reports. A pack is a zip anyone can check without Lowtide's state."""
+"""Seal and pack. A seal fixes the journal heads and the reports. A pack is a zip anyone can check without Redsweep's state."""
 from __future__ import annotations
 
 import hashlib
@@ -25,7 +25,7 @@ class SealError(Exception):
 def _key(key_file=None):
     if key_file:
         return Path(key_file).read_bytes().strip()
-    k = os.environ.get("LOWTIDE_KEY")
+    k = os.environ.get("REDSWEEP_KEY")
     return k.encode() if k else None
 
 
@@ -40,7 +40,7 @@ def make_seal(store: Store, reports: dict, key_file=None):
         if not ok:
             raise SealError(f"cannot seal: {name}: {info}")
         heads[name] = {"events": n, "head": info}
-    body = {"lowtide": __version__, "sealed_at": iso(now()), "journals": heads,
+    body = {"redsweep": __version__, "sealed_at": iso(now()), "journals": heads,
             "reports": {k: sha256_text(v) for k, v in reports.items()}}
     k = _key(key_file)
     if k:

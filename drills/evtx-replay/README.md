@@ -1,12 +1,12 @@
 # Replay of real Windows events (public sample set)
 
 The blue side of this drill is **real**: three small `.evtx` files from the public
-[EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES) repository (GPL-3.0). The script fetches them when it runs. They are not copied into Lowtide.
+[EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES) repository (GPL-3.0). The script fetches them when it runs. They are not copied into Redsweep.
 
 The operator side is **synthetic**: six lines written to line up with the real timestamps, because no public operator logs exist for these events. Nothing here ran on GOAD.
 
 ```
-pip install evtx          # a separate package; Lowtide itself has no dependencies
+pip install evtx          # a separate package; Redsweep itself has no dependencies
 python replay.py
 ```
 

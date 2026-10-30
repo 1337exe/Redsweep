@@ -145,12 +145,12 @@ def to_markdown(r) -> str:
     L.append("\n## Teardown\n")
     for s in r["teardown"]:
         L.append(f"- [{'x' if s['done'] else ' '}] {s['ref']} {s['text']}" + (f" ({s['why']})" if s["why"] else ""))
-    L.append("\n---\nThis report was built from a hash-chained journal. `lowtide verify` checks the chain; `lowtide seal` seals the closeout.\n")
+    L.append("\n---\nThis report was built from a hash-chained journal. `redsweep verify` checks the chain; `redsweep seal` seals the closeout.\n")
     return "\n".join(L)
 
 
-_CSS = """:root{--bg:#f7fafb;--fg:#10222b;--mut:#5b6f79;--line:#d5e0e5;--ok:#0f7a52;--bad:#b3261e;--warn:#9a6700;--card:#fff}
-@media(prefers-color-scheme:dark){:root{--bg:#0c171c;--fg:#e6f0f3;--mut:#93a8b1;--line:#22363f;--ok:#4ad19b;--bad:#ff8a80;--warn:#e3b341;--card:#122128}}
+_CSS = """:root{--bg:#faf8f8;--fg:#14161b;--mut:#5a606b;--line:#e2d8d8;--ok:#0f7a52;--bad:#b3261e;--warn:#9a6700;--card:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--fg:#f2f2f4;--mut:#a3a8b3;--line:#2b303b;--ok:#4ad19b;--bad:#ff8a80;--warn:#e3b341;--card:#171a21}}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
 main{max-width:1100px;margin:0 auto;padding:24px 16px 60px}h1{font-size:24px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 8px;border-bottom:1px solid var(--line);padding-bottom:4px}
 .sub{color:var(--mut)}.banner{padding:14px 16px;border-radius:8px;margin:16px 0;font-weight:600;border:1px solid var(--line);background:var(--card)}
@@ -187,4 +187,4 @@ def to_html(r) -> str:
             f"<h2>Evidence custody</h2><table><tr><th>ID<th>Label<th>Ladder<th>SHA-256<th>Handed to<th>Destroyed</tr>{ev or '<tr><td colspan=6>None.</td></tr>'}</table>"
             f"<h2>Control Team decisions</h2><table><tr><th>Time<th>Decision<th>Decider<th>Why</tr>{de or '<tr><td colspan=4>None recorded.</td></tr>'}</table>"
             f"<h2>Detections</h2><table><tr><th>Time<th>Level<th>Host<th>Source<th>Evidence</tr>{dt_ or '<tr><td colspan=5>None recorded.</td></tr>'}</table>"
-            f"<p class=sub>Built from a hash-chained journal. Run <code>lowtide verify</code> to check it.</p></main></body></html>")
+            f"<p class=sub>Built from a hash-chained journal. Run <code>redsweep verify</code> to check it.</p></main></body></html>")

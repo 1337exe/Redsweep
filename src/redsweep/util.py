@@ -18,7 +18,7 @@ def iso(d: dt.datetime) -> str:
 
 
 def parse_time(s) -> dt.datetime:
-    """Parse a time. Times without a zone are read as UTC. Everything Lowtide stores is UTC."""
+    """Parse a time. Times without a zone are read as UTC. Everything Redsweep stores is UTC."""
     if isinstance(s, dt.datetime):
         d = s
     else:

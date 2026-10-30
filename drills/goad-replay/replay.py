@@ -9,13 +9,13 @@ import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "lowtide-goad-replay").resolve()
-HOME = W / ".lowtide"
+W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "redsweep-goad-replay").resolve()
+HOME = W / ".redsweep"
 
 
 def lt(op, *args):
-    env = dict(os.environ, LOWTIDE_HOME=str(HOME), LOWTIDE_OPERATOR=op, PYTHONIOENCODING="utf-8")
-    p = subprocess.run([sys.executable, "-m", "lowtide", *args], env=env, capture_output=True, text=True, encoding="utf-8")
+    env = dict(os.environ, REDSWEEP_HOME=str(HOME), REDSWEEP_OPERATOR=op, PYTHONIOENCODING="utf-8")
+    p = subprocess.run([sys.executable, "-m", "redsweep", *args], env=env, capture_output=True, text=True, encoding="utf-8")
     return p.returncode, (p.stdout or "") + (p.stderr or "")
 
 

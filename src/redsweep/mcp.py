@@ -13,21 +13,21 @@ from .ops import Engagement, OpsError
 S = lambda props, req=(): {"type": "object", "properties": props, "required": list(req)}
 STR = {"type": "string"}
 TOOLS = [
-    ("lowtide_status", "Read the engagement state first: frozen or not, open changes, open credentials, warnings. If frozen, stop acting.", S({})),
-    ("lowtide_scope_check", "Check a host, URL or account against the rules of engagement BEFORE touching it. Do not act on 'out' or 'unlisted'.",
+    ("redsweep_status", "Read the engagement state first: frozen or not, open changes, open credentials, warnings. If frozen, stop acting.", S({})),
+    ("redsweep_scope_check", "Check a host, URL or account against the rules of engagement BEFORE touching it. Do not act on 'out' or 'unlisted'.",
      S({"target": STR, "action_class": STR}, ["target"])),
-    ("lowtide_price", "Look up what an action class leaves behind and where it is recorded, before you run it.", S({"action_class": STR}, ["action_class"])),
-    ("lowtide_log_action", "Record an action in the operator log. Record failures and dead ends too. Name the assumption you tested. Refused if the target is out of scope or the engagement is frozen.",
+    ("redsweep_price", "Look up what an action class leaves behind and where it is recorded, before you run it.", S({"action_class": STR}, ["action_class"])),
+    ("redsweep_log_action", "Record an action in the operator log. Record failures and dead ends too. Name the assumption you tested. Refused if the target is out of scope or the engagement is frozen.",
      S({"text": STR, "host": STR, "layer": {"type": "string", "enum": ERROR_LAYERS}, "result": {"type": "string", "enum": ["ok", "fail", "partial", "planned"]},
         "assumption": STR, "new_information": {"type": "boolean"}, "action_class": STR}, ["text"])),
-    ("lowtide_change_add", "Record a change to a target BEFORE you make it, with its original value. Without the original value the call is refused.",
+    ("redsweep_change_add", "Record a change to a target BEFORE you make it, with its original value. Without the original value the call is refused.",
      S({"kind": {"type": "string", "enum": sorted(CHANGE_KINDS)}, "host": STR, "object": STR, "change": STR, "original_value": STR,
         "created": {"type": "boolean"}, "rollback_plan": STR}, ["kind", "host", "object", "change"])),
-    ("lowtide_change_rollback", "Record that you rolled a change back, and how. This does not close it; a read-back must follow.",
+    ("redsweep_change_rollback", "Record that you rolled a change back, and how. This does not close it; a read-back must follow.",
      S({"ref": STR, "how": STR, "durable_control_remaining": STR}, ["ref", "how"])),
-    ("lowtide_change_verify", "Read the state back AFTER rollback and pass the value you read. It is compared with the original value.",
+    ("redsweep_change_verify", "Read the state back AFTER rollback and pass the value you read. It is compared with the original value.",
      S({"ref": STR, "readback_value": STR}, ["ref", "readback_value"])),
-    ("lowtide_closeout_check", "List everything that still blocks closing the engagement. Run it before you say you are done.", S({})),
+    ("redsweep_closeout_check", "List everything that still blocks closing the engagement. Run it before you say you are done.", S({})),
 ]
 
 
@@ -36,13 +36,13 @@ def _text(o):
 
 
 def call(eng: Engagement, name: str, a: dict):
-    if name == "lowtide_status":
+    if name == "redsweep_status":
         st = eng.state()
         items = check(eng)
         return {"frozen": st.frozen, "freeze_reason": (st.freeze_info or {}).get("reason"), "actions": len(st.actions),
                 "open_changes": [f"{c['id']} {c['kind']} {c['object']} [{c['status']}]" for c in st.active_changes()],
                 "blockers": len(blockers(items)), "warnings": st.warnings}
-    if name == "lowtide_scope_check":
+    if name == "redsweep_scope_check":
         if not eng.scope:
             return {"verdict": "unlisted", "why": "no scope file"}
         v, why = eng.scope.check(a["target"])
@@ -52,23 +52,23 @@ def call(eng: Engagement, name: str, a: dict):
         ok, w = eng.scope.check_window()
         res["in_window"] = ok
         return res
-    if name == "lowtide_price":
+    if name == "redsweep_price":
         return pricing.explain(a["action_class"])
-    if name == "lowtide_log_action":
+    if name == "redsweep_log_action":
         ev, warn = eng.log_action(a["text"], host=a.get("host"), layer=a.get("layer", "n/a"), result=a.get("result", "ok"),
                                   assumption=a.get("assumption"), new_info=a.get("new_information", False), cls=a.get("action_class"))
         return {"recorded": ev["id"], "warning": warn}
-    if name == "lowtide_change_add":
+    if name == "redsweep_change_add":
         ev = eng.add_change(a["kind"], a.get("host"), a["object"], a["change"], original=a.get("original_value"), created=a.get("created", False),
                             rollback_plan=a.get("rollback_plan", ""))
         return {"recorded": ev["id"], "next": "make the change, then later roll it back and read it back"}
-    if name == "lowtide_change_rollback":
+    if name == "redsweep_change_rollback":
         ev, _ = eng.rollback(a["ref"], how=a["how"], durable=a.get("durable_control_remaining"))
-        return {"recorded": True, "next": "now read the state back and call lowtide_change_verify"}
-    if name == "lowtide_change_verify":
+        return {"recorded": True, "next": "now read the state back and call redsweep_change_verify"}
+    if name == "redsweep_change_verify":
         r = eng.verify(a["ref"], readback_value=a["readback_value"])
         return {"change": r["id"], "result": r["result"], "strength": r["strength"]}
-    if name == "lowtide_closeout_check":
+    if name == "redsweep_closeout_check":
         items = check(eng)
         return {"clean": not blockers(items), "items": items}
     raise KeyError(name)
@@ -81,7 +81,7 @@ def handle(eng: Engagement, msg: dict):
     ok = lambda r: {"jsonrpc": "2.0", "id": mid, "result": r}
     if method == "initialize":
         return ok({"protocolVersion": (msg.get("params") or {}).get("protocolVersion", "2024-11-05"), "capabilities": {"tools": {}},
-                   "serverInfo": {"name": "lowtide", "version": __version__}})
+                   "serverInfo": {"name": "redsweep", "version": __version__}})
     if method == "ping":
         return ok({})
     if method == "tools/list":

@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.1.0
+
+First release. Change ledger with verified rollback, rules of engagement as code, credential containment, evidence custody and canary proof,
+freeze / stop / SITREP / Control Team decisions, closeout gate with report, handoff list, seal and pack, purple review and ATT&CK Navigator layer,
+Cobalt Strike / Ghostwriter / CSV / JSONL import, Ghostwriter / JSON / Markdown export, MCP server, demo, live lab and test kit.
+
+Also in this release:
 
 - `wrap` now stamps an action with the time it started, not the time it finished.
 - `review` credits each blue event to one red action (the one named by `detect --action`, otherwise the closest earlier action on the same host).
@@ -12,9 +18,3 @@
 - New: `drills/evtx-replay`, which replays real Windows events from a public sample set.
 - `wrap --text` gives an action a readable description (the full command is still stored).
 - New: `drills/local-two-operator` (`drill.py` runs on Linux and Windows), a two-operator drill on real local services. New: `docs/validation.md`.
-
-## 0.1.0
-
-First release. Change ledger with verified rollback, rules of engagement as code, credential containment, evidence custody and canary proof,
-freeze / stop / SITREP / Control Team decisions, closeout gate with report, handoff list, seal and pack, purple review and ATT&CK Navigator layer,
-Cobalt Strike / Ghostwriter / CSV / JSONL import, Ghostwriter / JSON / Markdown export, MCP server, demo, live lab and test kit.

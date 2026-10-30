@@ -10,9 +10,9 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "lowtide-drill").resolve()
+W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "redsweep-drill").resolve()
 PY = sys.executable
-HOME = W / ".lowtide"
+HOME = W / ".redsweep"
 checks = []
 procs = []
 
@@ -26,8 +26,8 @@ def H(*args):  # a helper command line, usable inside capture and rollback comma
 
 
 def lt(op, *args, show=True):
-    env = dict(os.environ, LOWTIDE_HOME=str(HOME), LOWTIDE_OPERATOR=op, PYTHONIOENCODING="utf-8")
-    p = subprocess.run([PY, "-m", "lowtide", *args], env=env, capture_output=True, text=True, encoding="utf-8")
+    env = dict(os.environ, REDSWEEP_HOME=str(HOME), REDSWEEP_OPERATOR=op, PYTHONIOENCODING="utf-8")
+    p = subprocess.run([PY, "-m", "redsweep", *args], env=env, capture_output=True, text=True, encoding="utf-8")
     out = (p.stdout or "") + (p.stderr or "")
     if show and out.strip():
         print(out.rstrip())

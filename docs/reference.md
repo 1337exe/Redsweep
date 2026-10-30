@@ -27,7 +27,7 @@
 | `mcp` | MCP server on stdio |
 | `doctor` / `demo` / `lab` / `selftest` | the test kit |
 
-Every command takes `--home` (folder) and `--operator`. Defaults: `$LOWTIDE_HOME` or `./.lowtide`; `$LOWTIDE_OPERATOR` or your user name.
+Every command takes `--home` (folder) and `--operator`. Defaults: `$REDSWEEP_HOME` or `./.redsweep`; `$REDSWEEP_OPERATOR` or your user name.
 
 ## Exit codes
 
@@ -55,7 +55,7 @@ Patterns: exact names, `*` wildcards, and CIDR networks. Out of scope wins. URLs
 ## Files
 
 ```
-.lowtide/
+.redsweep/
   config.json  scope.json
   journal/<operator>.jsonl      append-only, one JSON event per line, each with the hash of the one before
   evidence/                     only if you used --copy (mode 600)
@@ -64,11 +64,11 @@ Patterns: exact names, `*` wildcards, and CIDR networks. Out of scope wins. URLs
 
 ## Security model, in plain words
 
-- The journal is **tamper-evident, not tamper-proof**. Each event hashes the previous one, so an edit or deletion is detected by `lowtide verify`.
-  Someone who can rewrite a whole file and recompute every hash can forge it. To close that gap, sign the closeout (`LOWTIDE_KEY`, or sign `seal.json` yourself) and keep the seal's
+- The journal is **tamper-evident, not tamper-proof**. Each event hashes the previous one, so an edit or deletion is detected by `redsweep verify`.
+  Someone who can rewrite a whole file and recompute every hash can forge it. To close that gap, sign the closeout (`REDSWEEP_KEY`, or sign `seal.json` yourself) and keep the seal's
   head hashes somewhere else, such as the report you send the client.
 - Secrets are replaced by a fingerprint before they reach the journal. The detector looks for common key, token and password shapes; it cannot know your own secret formats. Use `--secret`.
-- `capture`, `rollback-cmd` and `wrap` run commands through your shell, as you, on the machine where Lowtide runs. The MCP server never runs them.
+- `capture`, `rollback-cmd` and `wrap` run commands through your shell, as you, on the machine where Redsweep runs. The MCP server never runs them.
 - Imports are not scope-checked, because they are history.
 - Developed and tested on Linux with Python 3.10 to 3.13. Windows is experimental (CI job only).
-- Lowtide scans nothing, exploits nothing and evades nothing. It records, checks and refuses. Use it only on systems you are authorised to test.
+- Redsweep scans nothing, exploits nothing and evades nothing. It records, checks and refuses. Use it only on systems you are authorised to test.

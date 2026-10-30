@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lowtide"
+name = "redsweep"
 version = "0.1.0"
-description = "Leave nothing behind, and prove it. Change ledger, rollback verifier and control-team kit for red team engagements."
+description = "Sweep the engagement clean, and prove it. Change ledger, rollback verifier and control-team kit for red team engagements."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -18,11 +18,11 @@ dependencies = []
 dev = ["pytest", "build"]
 
 [project.urls]
-Homepage = "https://github.com/1337exe/lowtide"
-Issues = "https://github.com/1337exe/lowtide/issues"
+Homepage = "https://github.com/1337exe/redsweep"
+Issues = "https://github.com/1337exe/redsweep/issues"
 
 [project.scripts]
-lowtide = "lowtide.cli:main"
+redsweep = "redsweep.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

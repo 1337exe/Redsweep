@@ -10,13 +10,13 @@ import pytest
 
 needs_gpg = pytest.mark.skipif(not shutil.which('gpg') or os.name == 'nt', reason='gpg not installed (or Windows, where gpg signing is untested)')
 
-from lowtide import importers, pricing, review, seal
-from lowtide.cli import main
-from lowtide.closeout import blockers, check, report_data, to_html, to_markdown
-from lowtide.control import build_sitrep
-from lowtide.ops import OpsError, normalize
-from lowtide.scope import Scope, host_of
-from lowtide.store import Store, StoreError
+from redsweep import importers, pricing, review, seal
+from redsweep.cli import main
+from redsweep.closeout import blockers, check, report_data, to_html, to_markdown
+from redsweep.control import build_sitrep
+from redsweep.ops import OpsError, normalize
+from redsweep.scope import Scope, host_of
+from redsweep.store import Store, StoreError
 
 
 # ---------- store
@@ -330,7 +330,7 @@ def test_import_time_is_original_and_utc(eng):
 
 def test_ghostwriter_roundtrip(eng):
     importers.do_import(eng, "ghostwriter", "examples/ghostwriter-oplog.csv")
-    from lowtide.exporters import export
+    from redsweep.exporters import export
     csv_text = export(eng.state(), "ghostwriter")
     assert csv_text.splitlines()[0].startswith("start_date,end_date")
     assert "checked the status page" in csv_text
@@ -351,8 +351,8 @@ def test_import_scope_not_enforced_for_history(eng, tmp_path):
 def test_review_join_and_unmatched(eng):
     eng.log_action("listed shares", host="ws1.lab.example", cls="smb-admin-share-write", at="2026-10-03T10:00:00Z")
     eng.log_action("quiet read", host="ws1.lab.example", at="2026-10-03T12:00:00Z")
-    blue = [{"t": __import__("lowtide.util", fromlist=["x"]).parse_time("2026-10-03T10:07:00Z"), "host": "ws1", "source": "EDR", "summary": "s", "level": "L3", "ref": ""},
-            {"t": __import__("lowtide.util", fromlist=["x"]).parse_time("2026-10-03T20:00:00Z"), "host": "ws9", "source": "SIEM", "summary": "n", "level": "L1", "ref": ""}]
+    blue = [{"t": __import__("redsweep.util", fromlist=["x"]).parse_time("2026-10-03T10:07:00Z"), "host": "ws1", "source": "EDR", "summary": "s", "level": "L3", "ref": ""},
+            {"t": __import__("redsweep.util", fromlist=["x"]).parse_time("2026-10-03T20:00:00Z"), "host": "ws9", "source": "SIEM", "summary": "n", "level": "L1", "ref": ""}]
     r = review.review(eng.state(), blue, 30)
     assert r["seen"] == 1 and r["missed"] == 1 and len(r["unmatched_blue"]) == 1
     assert r["actions"][0]["level"] == "L3" and "smb-admin-share-write" in r["lessons"][0]
@@ -412,7 +412,7 @@ def test_normalize():
 
 # ---------- cli exit codes
 def test_cli_codes(tmp_path, monkeypatch, capsys):
-    monkeypatch.setenv("LOWTIDE_HOME", str(tmp_path / "h")); monkeypatch.setenv("LOWTIDE_OPERATOR", "alice")
+    monkeypatch.setenv("REDSWEEP_HOME", str(tmp_path / "h")); monkeypatch.setenv("REDSWEEP_OPERATOR", "alice")
     assert main(["init", "--name", "X"]) == 0
     (tmp_path / "h" / "scope.json").write_text(json.dumps({"in_scope": {"hosts": ["127.0.0.1"]}}))
     assert main(["scope", "check", "evil.example"]) == 1
@@ -423,28 +423,28 @@ def test_cli_codes(tmp_path, monkeypatch, capsys):
 
 
 def test_cli_mcp_no_exec(eng):
-    from lowtide import mcp
+    from redsweep import mcp
     eng.allow_exec = False
-    r = mcp.handle(eng, {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "lowtide_change_add",
+    r = mcp.handle(eng, {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "redsweep_change_add",
                          "arguments": {"kind": "file", "host": "127.0.0.1", "object": "o", "change": "c", "original_value": "v"}}})
     assert not r["result"].get("isError")
     names = {t["name"] for t in mcp.handle(eng, {"jsonrpc": "2.0", "id": 4, "method": "tools/list"})["result"]["tools"]}
-    assert not any(n in names for n in ("lowtide_waive", "lowtide_decide", "lowtide_resume"))
+    assert not any(n in names for n in ("redsweep_waive", "redsweep_decide", "redsweep_resume"))
 
 
 # ---------- navigator and handoff
 def test_navigator_layer(eng):
-    from lowtide import navigator
+    from redsweep import navigator
     eng.log_action("dump", host="ws1.lab.example", cls="lsass-access", at="2026-10-03T10:00:00Z")
     eng.log_action("quiet", host="ws1.lab.example", cls="wmi-exec", at="2026-10-03T11:00:00Z")
-    blue = [{"t": __import__("lowtide.util", fromlist=["x"]).parse_time("2026-10-03T10:03:00Z"), "host": "ws1", "source": "EDR", "summary": "", "level": "L4", "ref": ""}]
+    blue = [{"t": __import__("redsweep.util", fromlist=["x"]).parse_time("2026-10-03T10:03:00Z"), "host": "ws1", "source": "EDR", "summary": "", "level": "L4", "ref": ""}]
     lay = navigator.layer(review.review(eng.state(), blue))
     scores = {t["techniqueID"]: t["score"] for t in lay["techniques"]}
     assert scores == {"T1003.001": 5, "T1047": 0}
 
 
 def test_handoff_lists_credentials_and_durable(eng):
-    from lowtide import handoff
+    from redsweep import handoff
     eng.add_cred("gcp-sa-key", "svc@proj", material="k")
     c = eng.add_change("iam", "127.0.0.1", "role", "x", original="p")
     eng.rollback(c["id"], how="x", durable="analyst keeps iam.roles.update")
@@ -514,7 +514,7 @@ def test_gpg_signed_pack_roundtrip_and_tamper(eng, tmp_path):
 
 # ---------- found by the local drill
 def test_review_credits_each_blue_event_to_one_action(eng):
-    from lowtide.util import parse_time
+    from redsweep.util import parse_time
     eng.log_action("first", host="a.lab.example", at="2026-10-03T10:00:00Z")
     eng.log_action("second", host="a.lab.example", at="2026-10-03T10:05:00Z")
     blue = [{"t": parse_time("2026-10-03T10:06:00Z"), "host": "a", "source": "EDR", "summary": "s", "level": "L2", "ref": ""}]
@@ -532,21 +532,21 @@ def test_review_named_action_gets_the_credit(eng):
 
 def test_wrap_stamps_the_start_time(tmp_path, monkeypatch):
     import json as _j
-    from lowtide import cli
-    from lowtide.store import Store
+    from redsweep import cli
+    from redsweep.store import Store
     home = tmp_path / ".lt"
-    monkeypatch.setenv("LOWTIDE_HOME", str(home)); monkeypatch.setenv("LOWTIDE_OPERATOR", "alice")
+    monkeypatch.setenv("REDSWEEP_HOME", str(home)); monkeypatch.setenv("REDSWEEP_OPERATOR", "alice")
     st = Store(home); st.init("T", "c", "alice")
     st.scope_path.write_text(_j.dumps({"engagement": "T", "window": {"start": "2020-01-01T00:00:00Z", "end": "2099-01-01T00:00:00Z"},
                                        "in_scope": {"hosts": ["127.0.0.1"]}, "out_of_scope": [], "forbidden_actions": [], "roles": {}, "tripwires": []}))
     assert cli.main(["wrap", "--host", "127.0.0.1", "--", sys.executable, "-c", "import time; time.sleep(1.2)"]) == 0
-    a = Store(home) and __import__("lowtide.state", fromlist=["build"]).build(Store(home)).actions[0]
-    from lowtide.util import parse_time
+    a = Store(home) and __import__("redsweep.state", fromlist=["build"]).build(Store(home)).actions[0]
+    from redsweep.util import parse_time
     assert (parse_time(a["recorded"]) - parse_time(a["t"])).total_seconds() >= 1  # stamped when it began, not when it ended
 
 
 def test_review_does_not_match_different_ip_addresses(eng):
-    from lowtide.util import parse_time
+    from redsweep.util import parse_time
     eng.log_action("on .13", host="127.0.0.1", at="2026-10-03T10:00:00Z")
     blue = [{"t": parse_time("2026-10-03T10:00:05Z"), "host": "127.0.0.12", "source": "x", "summary": "s", "level": "L1", "ref": ""}]
     r = review.review(eng.state(), blue, 30)
@@ -555,7 +555,7 @@ def test_review_does_not_match_different_ip_addresses(eng):
 
 
 def test_review_scores_failed_attempts_too(eng):
-    from lowtide.util import parse_time
+    from redsweep.util import parse_time
     eng.log_action("wrong password", host="dc1.lab.example", result="fail", at="2026-10-03T10:00:00Z")
     eng.log_action("only planned", host="dc1.lab.example", result="planned", at="2026-10-03T10:01:00Z")
     blue = [{"t": parse_time("2026-10-03T10:00:04Z"), "host": "dc1", "source": "Security-4625", "summary": "s", "level": "L1", "ref": ""}]

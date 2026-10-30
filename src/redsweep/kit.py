@@ -1,4 +1,4 @@
-"""The test kit: run it on your own machine before you trust Lowtide with a real engagement."""
+"""The test kit: run it on your own machine before you trust Redsweep with a real engagement."""
 from __future__ import annotations
 
 import io
@@ -162,8 +162,8 @@ def _(td):
     e.allow_exec = False
     r = mcp.handle(e, {"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
     names = {t["name"] for t in r["result"]["tools"]}
-    r2 = mcp.handle(e, {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "lowtide_log_action", "arguments": {"text": "x", "host": "bad.lab.example"}}})
-    return "lowtide_change_add" in names and r2["result"].get("isError") is True and "waive" not in " ".join(names)
+    r2 = mcp.handle(e, {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "redsweep_log_action", "arguments": {"text": "x", "host": "bad.lab.example"}}})
+    return "redsweep_change_add" in names and r2["result"].get("isError") is True and "waive" not in " ".join(names)
 
 
 @step("importing the same log twice adds nothing the second time")
@@ -180,9 +180,9 @@ POSIX_ONLY = set()  # every step now runs on Windows too; only the live lab need
 
 
 def selftest(keep=False):
-    td = tempfile.mkdtemp(prefix="lowtide-kit-")
+    td = tempfile.mkdtemp(prefix="redsweep-kit-")
     bad = 0
-    print(f"Lowtide test kit (working in {td})\n")
+    print(f"Redsweep test kit (working in {td})\n")
     for i, (name, fn) in enumerate(STEPS, 1):
         sub = Path(td) / f"s{i}"; sub.mkdir()
         if os.name == "nt" and name in POSIX_ONLY:

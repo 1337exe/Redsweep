@@ -1,8 +1,8 @@
-name: Lowtide closeout gate
+name: Redsweep closeout gate
 description: Fail the job while an engagement still has anything left behind (changes not rolled back and read back, credentials not contained, evidence not handed over).
 branding: { icon: anchor, color: blue }
 inputs:
-  home: { description: "Folder that holds the engagement (config.json and journal/)", default: ".lowtide" }
+  home: { description: "Folder that holds the engagement (config.json and journal/)", default: ".redsweep" }
   mode: { description: "check (default) or close (also writes the report, seal and pack)", default: "check" }
 runs:
   using: composite
@@ -13,12 +13,12 @@ runs:
       run: pip install "${{ github.action_path }}"
     - shell: bash
       run: |
-        lowtide verify --home "${{ inputs.home }}"
+        redsweep verify --home "${{ inputs.home }}"
         if [ "${{ inputs.mode }}" = "close" ]; then
-          lowtide close --home "${{ inputs.home }}"
+          redsweep close --home "${{ inputs.home }}"
         else
-          lowtide close --check --home "${{ inputs.home }}"
+          redsweep close --check --home "${{ inputs.home }}"
         fi
     - if: always() && inputs.mode == 'close'
       uses: actions/upload-artifact@v4
-      with: { name: lowtide-closeout, path: "${{ inputs.home }}/reports" }
+      with: { name: redsweep-closeout, path: "${{ inputs.home }}/reports" }

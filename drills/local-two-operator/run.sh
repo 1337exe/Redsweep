@@ -3,25 +3,25 @@
 # Usage: ./run.sh [WORKDIR] [--system]    --system also adds and removes one local user (needs root; use a throwaway machine).
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-W="${1:-/tmp/lowtide-drill}"; SYSTEM=0; [ "${2:-}" = "--system" ] && SYSTEM=1
-[ "$W" = "--system" ] && { W=/tmp/lowtide-drill; SYSTEM=1; }
+W="${1:-/tmp/redsweep-drill}"; SYSTEM=0; [ "${2:-}" = "--system" ] && SYSTEM=1
+[ "$W" = "--system" ] && { W=/tmp/redsweep-drill; SYSTEM=1; }
 rm -rf "$W"; mkdir -p "$W/app" "$W/files"; cd "$W"
-export LOWTIDE_HOME="$W/.lowtide"
-A() { LOWTIDE_OPERATOR=alpha lowtide "$@"; }   # red operator 1
-B() { LOWTIDE_OPERATOR=bravo lowtide "$@"; }   # red operator 2: does the read-backs
-C() { LOWTIDE_OPERATOR=casey lowtide "$@"; }   # Control Team
+export REDSWEEP_HOME="$W/.redsweep"
+A() { REDSWEEP_OPERATOR=alpha redsweep "$@"; }   # red operator 1
+B() { REDSWEEP_OPERATOR=bravo redsweep "$@"; }   # red operator 2: does the read-backs
+C() { REDSWEEP_OPERATOR=casey redsweep "$@"; }   # Control Team
 id_of() { grep -oE "$1-[0-9a-f]{5}" | head -1; }
 step() { printf '\n=== %s\n' "$*"; }
 PIDS=""; trap 'kill $PIDS 2>/dev/null; [ $SYSTEM = 1 ] && userdel drillsvc 2>/dev/null' EXIT
 
 step "setup: engagement, scope, two operators and a Control Team"
 A init --name DRILL-1 --client "Local drill" >/dev/null
-cat > "$LOWTIDE_HOME/scope.json" <<JSON
+cat > "$REDSWEEP_HOME/scope.json" <<JSON
 {"engagement":"DRILL-1","window":{"start":"2026-01-01T00:00:00Z","end":"2027-12-31T23:59:59Z"},
  "in_scope":{"hosts":["127.0.0.0/24"],"cloud_projects":[],"accounts":[]},"out_of_scope":["127.0.0.99"],
  "forbidden_actions":["denial-of-service"],"roles":{"control_team":["casey"],"red_lead":["alpha"]},"tripwires":["external_party"]}
 JSON
-cat > "$LOWTIDE_HOME/config.json" <<JSON
+cat > "$REDSWEEP_HOME/config.json" <<JSON
 {"name":"DRILL-1","client":"Local drill","strict_scope":true,"require_second_operator":true,"min_verify_strength":"auto","assumption_stop_after":2,"sitrep_requires_log":true}
 JSON
 printf 'mode=standard\nlimit=100\n' > app/app.ini; : > app/users.txt; echo "hello" > files/notes.txt

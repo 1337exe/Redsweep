@@ -22,15 +22,15 @@ from .util import iso, now, sha256_text, short
 
 def _common():
     p = argparse.ArgumentParser(add_help=False)
-    p.add_argument("--home", help="engagement folder (default ./.lowtide or $LOWTIDE_HOME)")
-    p.add_argument("--operator", help="who you are (default $LOWTIDE_OPERATOR or your user name)")
+    p.add_argument("--home", help="engagement folder (default ./.redsweep or $REDSWEEP_HOME)")
+    p.add_argument("--operator", help="who you are (default $REDSWEEP_OPERATOR or your user name)")
     return p
 
 
 def build_parser():
     C = _common()
-    ap = argparse.ArgumentParser(prog="lowtide", description="Leave nothing behind, and prove it. Change ledger, rollback verifier and control-team kit for red team engagements.")
-    ap.add_argument("--version", action="version", version=f"lowtide {__version__}")
+    ap = argparse.ArgumentParser(prog="redsweep", description="Sweep the engagement clean, and prove it. Change ledger, rollback verifier and control-team kit for red team engagements.")
+    ap.add_argument("--version", action="version", version=f"redsweep {__version__}")
     sp = ap.add_subparsers(dest="cmd", required=True, metavar="COMMAND")
 
     def add(name, help_, **kw):
@@ -71,7 +71,7 @@ def build_parser():
     q = cs.add_parser("add", parents=[C], help="record a change BEFORE you make it")
     q.add_argument("--kind", required=True, choices=sorted(CHANGE_KINDS)); q.add_argument("--host"); q.add_argument("--object", required=True)
     q.add_argument("--change", required=True, help="what you are changing it to")
-    q.add_argument("--capture", help="a read-only command that prints the current state (best: Lowtide can run it again later)")
+    q.add_argument("--capture", help="a read-only command that prints the current state (best: Redsweep can run it again later)")
     q.add_argument("--original"); q.add_argument("--original-file"); q.add_argument("--created", action="store_true", help="the object did not exist before")
     q.add_argument("--ignore", action="append", help="regex of lines to ignore when comparing (timestamps, etags)")
     q.add_argument("--rollback-plan", default=""); q.add_argument("--rollback-cmd")
@@ -151,15 +151,15 @@ def build_parser():
     p = add("export", "write the log out for another tool")
     p.add_argument("fmt", choices=["ghostwriter", "json", "markdown"]); p.add_argument("--out")
 
-    p = add("navigator", "write an ATT&CK Navigator layer coloured by what blue saw"); p.add_argument("blue", nargs="?"); p.add_argument("--out", default="lowtide-layer.json"); p.add_argument("--window", type=int, default=30)
+    p = add("navigator", "write an ATT&CK Navigator layer coloured by what blue saw"); p.add_argument("blue", nargs="?"); p.add_argument("--out", default="redsweep-layer.json"); p.add_argument("--window", type=int, default=30)
     p = add("handoff", "write the list of things the client must do or know"); p.add_argument("--out")
     add("verify", "check every journal's hash chain")
     p = add("seal", "fix the journal heads and reports in a seal"); p.add_argument("--key-file"); p.add_argument("--gpg-key", help="sign the seal with this gpg key (needs gpg)")
     p = add("verify-pack", "check a closeout pack zip"); p.add_argument("pack"); p.add_argument("--key-file")
     add("mcp", "run the MCP server on stdio")
     add("doctor", "check this machine")
-    p = add("demo", "build a made-up engagement to look at"); p.add_argument("dir", nargs="?", default="lowtide-demo"); p.add_argument("--finish", action="store_true", help="also do the cleanup, so closeout passes")
-    p = add("lab", "run a real local exercise: real commands, real changes, real rollbacks"); p.add_argument("dir", nargs="?", default="lowtide-lab"); p.add_argument("--keep", action="store_true")
+    p = add("demo", "build a made-up engagement to look at"); p.add_argument("dir", nargs="?", default="redsweep-demo"); p.add_argument("--finish", action="store_true", help="also do the cleanup, so closeout passes")
+    p = add("lab", "run a real local exercise: real commands, real changes, real rollbacks"); p.add_argument("dir", nargs="?", default="redsweep-lab"); p.add_argument("--keep", action="store_true")
     p = add("selftest", "run the full test kit on this machine"); p.add_argument("--keep", action="store_true")
     return ap
 
@@ -240,7 +240,7 @@ def cmd_wrap(a):
     e = _eng(a)
     argv = a.argv[1:] if a.argv and a.argv[0] == "--" else a.argv
     if not argv:
-        _say("usage: lowtide wrap [options] -- COMMAND ARGS")
+        _say("usage: redsweep wrap [options] -- COMMAND ARGS")
         return 1
     e._active(e.state())
     e._guard(a.host, a.cls, a.scope_override)
@@ -259,9 +259,9 @@ def cmd_wrap(a):
     ev, warn = e.log_action(a.text or " ".join(argv), host=a.host, result="ok" if p.returncode == 0 else "fail", layer=a.layer, cls=a.cls,
                             assumption=a.assumption, cmd=" ".join(argv), exit_code=p.returncode, out_sha=sha256_text((p.stdout + p.stderr).decode(errors="replace")),
                             override=a.scope_override, at=started)
-    print(f"[lowtide] logged {ev['id']} (exit {p.returncode}, {time.time() - t0:.1f}s)", file=sys.stderr)
+    print(f"[redsweep] logged {ev['id']} (exit {p.returncode}, {time.time() - t0:.1f}s)", file=sys.stderr)
     if warn:
-        print("[lowtide] WARNING:", warn, file=sys.stderr)
+        print("[redsweep] WARNING:", warn, file=sys.stderr)
     return p.returncode
 
 
@@ -308,7 +308,7 @@ def cmd_change(a):
         return 0
     if a.sub == "rollback":
         ev, res = e.rollback(a.ref, how=a.how, run=a.run, durable=a.durable, verify=a.verify)
-        _say("rollback recorded." + (" Now read it back: `lowtide change verify " + a.ref + "`" if not a.verify else ""))
+        _say("rollback recorded." + (" Now read it back: `redsweep change verify " + a.ref + "`" if not a.verify else ""))
         if res:
             _say(f"read-back: {res['result'].upper()} ({res['strength']})")
             return 0 if res["result"] == "match" else 2
@@ -396,7 +396,7 @@ def cmd_detect(a):
     ev = e.detect(a.level, a.host, a.evidence, a.source, a.at, a.action)
     _say(f"recorded {ev['id']}: {a.level} {LEVELS.get(a.level, '')}")
     if a.level in ("L3", "L4", "L5"):
-        _say("This is serious enough to freeze: `lowtide freeze --reason ...` and send a SITREP.")
+        _say("This is serious enough to freeze: `redsweep freeze --reason ...` and send a SITREP.")
     return 0
 
 
@@ -482,7 +482,7 @@ def cmd_close(a):
         (out / k).write_text(v)
     _say(f"report written to {out}/ (closeout.md, closeout.html, closeout.json, client-handoff.md)")
     if b:
-        _say(f"\nNOT CLEAN: {len(b)} blocker(s). Fix them and run `lowtide close` again.")
+        _say(f"\nNOT CLEAN: {len(b)} blocker(s). Fix them and run `redsweep close` again.")
         return 2
     seal = seal_mod.make_seal(e.store, reports, a.key_file)
     (out / "seal.json").write_text(seal_mod.dump(seal))
@@ -494,7 +494,7 @@ def cmd_close(a):
     if not a.no_pack:
         pk, n = seal_mod.build_pack(e.store, str(out / "closeout-pack.zip"), reports, seal, extra)
         _say(f"pack: {pk} ({n} files)")
-    _say("\nCLEAN. Everything changed was undone and proved undone." + ("" if "hmac_sha256" in seal or a.gpg_key else " (seal is unsigned; use --gpg-key or set LOWTIDE_KEY)"))
+    _say("\nCLEAN. Everything changed was undone and proved undone." + ("" if "hmac_sha256" in seal or a.gpg_key else " (seal is unsigned; use --gpg-key or set REDSWEEP_KEY)"))
     return 0
 
 
@@ -559,7 +559,7 @@ def cmd_seal(a):
     seal = seal_mod.make_seal(e.store, reports, a.key_file)
     p = e.store.home / "seal.json"
     p.write_text(seal_mod.dump(seal))
-    _say(f"wrote {p}" + ("" if "hmac_sha256" in seal or a.gpg_key else " (unsigned: set LOWTIDE_KEY, use --gpg-key, or sign the file yourself)"))
+    _say(f"wrote {p}" + ("" if "hmac_sha256" in seal or a.gpg_key else " (unsigned: set REDSWEEP_KEY, use --gpg-key, or sign the file yourself)"))
     if a.gpg_key:
         _say(f"signed: {seal_mod.gpg_sign(str(p), a.gpg_key)}")
     return 0
@@ -581,13 +581,13 @@ def cmd_mcp(a):
 
 def cmd_doctor(a):
     import platform, shutil
-    _say(f"lowtide {__version__}  python {platform.python_version()}  {platform.system()}")
+    _say(f"redsweep {__version__}  python {platform.python_version()}  {platform.system()}")
     for t in ("git", "ssh-keygen", "gpg", "curl"):
         _say(f"  {t:11}: {'found' if shutil.which(t) else 'not found (optional)'}")
     s = Store(a.home)
     _say(f"  engagement  : {'found at ' + str(s.home) if s.exists() else 'none here'}")
     import os
-    _say(f"  LOWTIDE_KEY : {'set' if os.environ.get('LOWTIDE_KEY') else 'not set (seals will be unsigned)'}")
+    _say(f"  REDSWEEP_KEY : {'set' if os.environ.get('REDSWEEP_KEY') else 'not set (seals will be unsigned)'}")
     return 0
 
 
@@ -612,7 +612,7 @@ def main(argv=None):
     try:
         return fn(a)
     except (OpsError, StoreError, ScopeError, RefError, review_mod.ReviewError, importers.ImportError_, seal_mod.SealError, ValueError) as e:
-        print(f"lowtide: {e}", file=sys.stderr)
+        print(f"redsweep: {e}", file=sys.stderr)
         return 1
     except BrokenPipeError:
         return 0

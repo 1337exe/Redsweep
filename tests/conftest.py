@@ -1,7 +1,7 @@
 import json
 import pytest
-from lowtide.ops import Engagement
-from lowtide.store import Store
+from redsweep.ops import Engagement
+from redsweep.store import Store
 
 SCOPE = {"engagement": "T", "window": {"start": "2020-01-01T00:00:00Z", "end": "2099-01-01T00:00:00Z"},
          "in_scope": {"hosts": ["*.lab.example", "10.99.0.0/16", "127.0.0.1"]}, "out_of_scope": ["bad.lab.example", "10.99.250.0/24"],

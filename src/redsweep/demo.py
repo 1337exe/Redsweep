@@ -31,7 +31,7 @@ def at(day, hh=0, mm=0):
 
 
 def build_demo(directory, finish=False, quiet=False):
-    home = Path(directory) / ".lowtide"
+    home = Path(directory) / ".redsweep"
     if home.exists():
         shutil.rmtree(home)
     store = Store(home)
@@ -104,17 +104,17 @@ def build_demo(directory, finish=False, quiet=False):
         w.writerow([iso(at(4, 2, 0)), "wks-077.brightwater.example", "mail gateway", "unrelated phishing report", "L1"])
     if not quiet:
         print(f"demo engagement written to {Path(directory).resolve()}")
-        print("Look around (run from that folder, or set LOWTIDE_HOME):")
+        print("Look around (run from that folder, or set REDSWEEP_HOME):")
         print(f"  cd {Path(directory).resolve()}")
-        print((f"  $env:LOWTIDE_HOME = '{home.resolve()}'   # PowerShell" if os.name == "nt" else f"  export LOWTIDE_HOME={home.resolve()}"))
-        print("  lowtide status")
-        print("  lowtide change list")
-        print("  lowtide close --check" + ("" if finish else "          # fails: three things were never cleaned up"))
-        print("  lowtide sitrep --show 1")
-        print("  lowtide review blue-timeline.csv")
+        print((f"  $env:REDSWEEP_HOME = '{home.resolve()}'   # PowerShell" if os.name == "nt" else f"  export REDSWEEP_HOME={home.resolve()}"))
+        print("  redsweep status")
+        print("  redsweep change list")
+        print("  redsweep close --check" + ("" if finish else "          # fails: three things were never cleaned up"))
+        print("  redsweep sitrep --show 1")
+        print("  redsweep review blue-timeline.csv")
         if finish:
-            print("The cleanup is already done; try: lowtide close")
+            print("The cleanup is already done; try: redsweep close")
         else:
             print("Then finish the cleanup yourself:")
-            print("  lowtide demo --finish   (does it for you), then: lowtide close")
+            print("  redsweep demo --finish   (does it for you), then: redsweep close")
     return 0

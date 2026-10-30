@@ -1,5 +1,5 @@
 """The live lab: real commands, real state changes, real rollbacks, all on this machine, against a small throwaway web app that
-Lowtide starts on 127.0.0.1. Nothing leaves your computer. It checks that the tool really catches what it says it catches."""
+Redsweep starts on 127.0.0.1. Nothing leaves your computer. It checks that the tool really catches what it says it catches."""
 from __future__ import annotations
 
 import contextlib
@@ -69,7 +69,7 @@ class Lab:
         self.checks += 1
         ok = code == expect
         if show:
-            print("$ lowtide " + " ".join(a if " " not in a else repr(a) for a in argv))
+            print("$ redsweep " + " ".join(a if " " not in a else repr(a) for a in argv))
             for line in out.splitlines()[:12]:
                 print("  " + line)
             if len(out.splitlines()) > 12:
@@ -95,8 +95,8 @@ def run_lab(directory, keep=False):
     port = srv.server_address[1]
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{port}"
-    os.environ["LOWTIDE_HOME"] = str(lab.dir / ".lowtide")
-    os.environ["LOWTIDE_OPERATOR"] = "alice"
+    os.environ["REDSWEEP_HOME"] = str(lab.dir / ".redsweep")
+    os.environ["REDSWEEP_OPERATOR"] = "alice"
     curl = shutil.which("curl")
     if not curl:
         print("the lab needs curl (sudo apt install curl)")
@@ -104,11 +104,11 @@ def run_lab(directory, keep=False):
     print(f"Lab target: a small web app on {base}, files in {root}\n")
     L = lab.L
     L("init", "--name", "LAB-1", "--client", "this machine")
-    sc = json.loads((lab.dir / ".lowtide" / "scope.json").read_text())
+    sc = json.loads((lab.dir / ".redsweep" / "scope.json").read_text())
     sc.update({"engagement": "LAB-1", "in_scope": {"hosts": ["127.0.0.1", "localhost"]}, "out_of_scope": ["169.254.169.254"],
                "forbidden_actions": ["denial-of-service"], "roles": {"control_team": ["pat"], "red_lead": ["alice"]},
                "window": {"start": "2020-01-01T00:00:00Z", "end": "2099-12-31T23:59:59Z"}})
-    (lab.dir / ".lowtide" / "scope.json").write_text(json.dumps(sc, indent=2))
+    (lab.dir / ".redsweep" / "scope.json").write_text(json.dumps(sc, indent=2))
 
     print("\n--- 1. The rules of engagement are enforced, not remembered")
     L("scope", "check", "127.0.0.1")
@@ -116,7 +116,7 @@ def run_lab(directory, keep=False):
     L("wrap", "--host", "169.254.169.254", "--", curl, "-s", "http://169.254.169.254/", expect=1)
     L("wrap", "--host", "127.0.0.1", "--class", "network-logon", "--", curl, "-s", f"{base}/config")
 
-    print("\n--- 2. Record BEFORE you change; Lowtide captures the original state itself")
+    print("\n--- 2. Record BEFORE you change; Redsweep captures the original state itself")
     cfg, usr, upl, cron = (str(root / n) for n in ("app_config.ini", "users.txt", "uploads", "crontab.txt"))
     out, _ = L("change", "add", "--kind", "config", "--host", "127.0.0.1", "--object", "app setting export_limit", "--change", "100 -> 5000",
                "--capture", f"cat {cfg}", "--rollback-cmd", f"curl -s -X POST --data 'export_limit=100' {base}/config", show=False)
@@ -181,18 +181,18 @@ def run_lab(directory, keep=False):
     L("close")
 
     print("\n--- 6. The record cannot be quietly edited")
-    j = lab.dir / ".lowtide" / "journal" / "alice.jsonl"
+    j = lab.dir / ".redsweep" / "journal" / "alice.jsonl"
     original = j.read_text()
     j.write_text(original.replace("claims canary read", "nothing to see", 1))
     L("verify", expect=3)
-    L("verify-pack", str(lab.dir / ".lowtide" / "reports" / "closeout-pack.zip"))
+    L("verify-pack", str(lab.dir / ".redsweep" / "reports" / "closeout-pack.zip"))
     j.write_text(original)
     L("verify")
 
     srv.shutdown()
     ok = lab.fail == 0
     print(f"\nLab result: {lab.checks} commands run, {lab.fail} unexpected results. " + ("Everything behaved as the tool promises." if ok else "SOMETHING IS WRONG; see the lines marked LAB EXPECTED."))
-    print(f"Open the report: {lab.dir / '.lowtide' / 'reports' / 'closeout.html'}")
+    print(f"Open the report: {lab.dir / '.redsweep' / 'reports' / 'closeout.html'}")
     if not keep and ok:
         print("(use --keep to keep the folder; it is kept either way so you can open the report)")
     return 0 if ok else 1

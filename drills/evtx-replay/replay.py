@@ -1,10 +1,10 @@
-"""Replay REAL Windows Security events from a public sample set against Lowtide's purple review.
+"""Replay REAL Windows Security events from a public sample set against Redsweep's purple review.
 
 The blue side is real: three small .evtx files from the public EVTX-ATTACK-SAMPLES repository (github.com/sbousseaden/EVTX-ATTACK-SAMPLES,
-GPL-3.0). They are fetched when you run this script and are not copied into Lowtide. The operator side is SYNTHETIC: a short log written to line
+GPL-3.0). They are fetched when you run this script and are not copied into Redsweep. The operator side is SYNTHETIC: a short log written to line
 up with those real events, because no public operator logs exist for them. Nothing here ran on GOAD.
 
-Needs: git, and `pip install evtx` (a separate package; Lowtide itself has no dependencies).
+Needs: git, and `pip install evtx` (a separate package; Redsweep itself has no dependencies).
 Usage: python replay.py [WORKDIR]"""
 import csv
 import json
@@ -19,8 +19,8 @@ REPO = "https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES"
 FILES = ["Defense Evasion/DE_Fake_ComputerAccount_4720.evtx",
          "Credential Access/CA_4624_4625_LogonType2_LogonProc_chrome.evtx",
          "Discovery/discovery_local_user_or_group_windows_security_4799_4798.evtx"]
-W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "lowtide-evtx-replay").resolve()
-HOME = W / ".lowtide"
+W = Path(sys.argv[1] if len(sys.argv) > 1 else Path(tempfile.gettempdir()) / "redsweep-evtx-replay").resolve()
+HOME = W / ".redsweep"
 
 # Synthetic operator log, timed to the real events (UTC). host = the computer name the real events carry.
 OPS = [
@@ -34,8 +34,8 @@ OPS = [
 
 
 def lt(op, *args):
-    env = dict(os.environ, LOWTIDE_HOME=str(HOME), LOWTIDE_OPERATOR=op, PYTHONIOENCODING="utf-8")
-    p = subprocess.run([sys.executable, "-m", "lowtide", *args], env=env, capture_output=True, text=True, encoding="utf-8")
+    env = dict(os.environ, REDSWEEP_HOME=str(HOME), REDSWEEP_OPERATOR=op, PYTHONIOENCODING="utf-8")
+    p = subprocess.run([sys.executable, "-m", "redsweep", *args], env=env, capture_output=True, text=True, encoding="utf-8")
     return p.returncode, (p.stdout or "") + (p.stderr or "")
 
 

@@ -62,7 +62,7 @@ class Engagement:
     def _active(self, st):
         if st.frozen:
             raise OpsError(f"engagement is FROZEN ({st.freeze_info['reason']}). Only rollback, containment, SITREP, decisions and evidence "
-                           "handling are allowed. The Control Team resumes with `lowtide resume --approved-by NAME`.")
+                           "handling are allowed. The Control Team resumes with `redsweep resume --approved-by NAME`.")
 
     def _guard(self, host, cls=None, override=None, at=None):
         """Scope, window and forbidden-action checks. Returns the override reason if one was needed and given."""
@@ -93,7 +93,7 @@ class Engagement:
         if self.scope and tripwire not in self.scope.tripwires:
             raise OpsError(f"unknown tripwire {tripwire!r}; this engagement defines {self.scope.tripwires}")
         if not decision:
-            raise OpsError(f"tripwire {tripwire!r}: the Control Team must decide first. Record it with `lowtide decide ... --tag {tripwire}` and pass --decision ID.")
+            raise OpsError(f"tripwire {tripwire!r}: the Control Team must decide first. Record it with `redsweep decide ... --tag {tripwire}` and pass --decision ID.")
         _, d = self._find_decision(st, decision)
         if tripwire not in (d.get("tags") or []):
             raise OpsError(f"decision {decision} does not cover tripwire {tripwire!r}")
@@ -199,7 +199,7 @@ class Engagement:
         st = self.state()
         cid, c = self._change(st, ref)
         if c["status"] == "applied" and not force:
-            raise OpsError(f"{cid} has not been rolled back yet. Roll it back first (`lowtide change rollback {cid}`).")
+            raise OpsError(f"{cid} has not been rolled back yet. Roll it back first (`redsweep change rollback {cid}`).")
         if c["status"] == "waived":
             raise OpsError(f"{cid} is waived")
         r = c.get("rolled_by")

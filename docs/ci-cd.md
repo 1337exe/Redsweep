@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 1337exe/lowtide@v0.1.0
+      - uses: 1337exe/redsweep@v0.1.0
         with:
-          home: .lowtide          # where the engagement folder is
+          home: .redsweep          # where the engagement folder is
           mode: check             # check (default) | close
 ```
 
@@ -24,9 +24,9 @@ Journals that fail their hash check fail the job with exit code 3.
 ## Any other CI
 
 ```bash
-pip install git+https://github.com/1337exe/lowtide
-lowtide close --check --home .lowtide     # exit 0 clean, 2 blockers
-lowtide verify --home .lowtide            # exit 3 if a journal was edited
+pip install git+https://github.com/1337exe/redsweep
+redsweep close --check --home .redsweep     # exit 0 clean, 2 blockers
+redsweep verify --home .redsweep            # exit 3 if a journal was edited
 ```
 
 ## A warning

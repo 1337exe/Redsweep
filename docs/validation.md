@@ -1,25 +1,25 @@
-# Testing Lowtide in your own lab
+# Testing Redsweep in your own lab
 
-Lowtide records, checks and refuses. The right way to trust it is to try to make it fail. This page lists ways to do that, from five minutes to a full exercise.
+Redsweep records, checks and refuses. The right way to trust it is to try to make it fail. This page lists ways to do that, from five minutes to a full exercise.
 
 ## 1. Five minutes: the built-in kit
 
 ```bash
-lowtide selftest     # 13 checks, the last one is the live lab (skipped on Windows)
-lowtide lab          # the same lab, every command shown
+redsweep selftest     # 13 checks, the last one is the live lab (skipped on Windows)
+redsweep lab          # the same lab, every command shown
 ```
 
-The lab starts a throwaway web app on 127.0.0.1, changes real files through it, rolls them back, and checks that Lowtide catches a rollback that was incomplete.
+The lab starts a throwaway web app on 127.0.0.1, changes real files through it, rolls them back, and checks that Redsweep catches a rollback that was incomplete.
 
 ## 2. One hour: break it on purpose
 
-Try each of these and confirm Lowtide objects. If one slips through, that is a bug; please open an issue.
+Try each of these and confirm Redsweep objects. If one slips through, that is a bug; please open an issue.
 
 | Try | Expected |
 |---|---|
 | Roll back a change but leave one file behind | `change rollback --run --verify` returns MISMATCH, closeout stays blocked |
-| Edit one character in `.lowtide/journal/<you>.jsonl` | `lowtide verify` exits 3 |
-| Edit a file inside `closeout-pack.zip` | `lowtide verify-pack` exits 3 |
+| Edit one character in `.redsweep/journal/<you>.jsonl` | `redsweep verify` exits 3 |
+| Edit a file inside `closeout-pack.zip` | `redsweep verify-pack` exits 3 |
 | Point `wrap --host` at a host that is not in scope | refused before the command runs |
 | Run `decide` as a name that is not on the Control Team list | refused |
 | Add a change with no original value | refused |
@@ -33,28 +33,28 @@ A range gives you ground truth: you know what you did and what a defender should
 
 - **Active Directory:** [GOAD (Game of Active Directory)](https://github.com/Orange-Cyberdefense/GOAD). Elastic describes [automating GOAD and live-malware labs](https://www.elastic.co/security-labs/automating-goad-and-live-malware-labs) with detections.
 - **Telemetry for the blue side:** DetectionLab and Splunk's attack_range stand up logging and a SIEM next to a target network.
-- **Known actions to compare against:** Atomic Red Team (Red Canary) and MITRE Caldera run tests that map to ATT&CK techniques, so you can check that `lowtide review` and `lowtide navigator` agree with what actually ran.
+- **Known actions to compare against:** Atomic Red Team (Red Canary) and MITRE Caldera run tests that map to ATT&CK techniques, so you can check that `redsweep review` and `redsweep navigator` agree with what actually ran.
 - **Cloud:** CloudGoat (Rhino Security Labs) for AWS, and your own throwaway projects for GCP and Azure.
 
 Suggested drill:
 
-1. Two operators with their own `LOWTIDE_OPERATOR`. One person plays the Control Team.
+1. Two operators with their own `REDSWEEP_OPERATOR`. One person plays the Control Team.
 2. Log everything through `wrap` and the ledger. Make at least five state changes, including a cloud role or an account.
 3. Have the person playing blue trigger a staged "detection" part way through. Freeze, write a SITREP from the log, let the Control Team decide, resume.
 4. Clean up, and let the second operator do the read-backs (`require_second_operator`).
-5. Export the range SIEM's alerts as CSV and run `lowtide review`. Compare what it says was seen with what you know.
+5. Export the range SIEM's alerts as CSV and run `redsweep review`. Compare what it says was seen with what you know.
 
 ## 4. A real engagement: shadow mode
 
-Run Lowtide **beside** your normal process, with the client's consent, without letting it gate anything. At the end:
+Run Redsweep **beside** your normal process, with the client's consent, without letting it gate anything. At the end:
 
-- take your usual cleanup checklist and Lowtide's `close --check` list;
-- count the items only Lowtide found, the items only your checklist found, and any false alarms;
+- take your usual cleanup checklist and Redsweep's `close --check` list;
+- count the items only Redsweep found, the items only your checklist found, and any false alarms;
 - send us those counts (no client data): they are the most useful feedback we can get.
 
 ## 5. Replaying old work
 
-Export an old, scrubbed log (CSV) and import it with `lowtide import csv log.csv --map time=COL --map text=COL`. Check that the guessed action classes and the review make sense. Imports are history, so scope is not enforced.
+Export an old, scrubbed log (CSV) and import it with `redsweep import csv log.csv --map time=COL --map text=COL`. Check that the guessed action classes and the review make sense. Imports are history, so scope is not enforced.
 
 ## What has and has not been tested
 

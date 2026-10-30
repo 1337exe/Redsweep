@@ -6,7 +6,7 @@ import json
 from . import pricing
 
 
-def layer(review_result: dict, name="Lowtide engagement") -> dict:
+def layer(review_result: dict, name="Redsweep engagement") -> dict:
     by = {}
     for a in review_result["actions"]:
         tid = pricing.TECHNIQUES.get(a.get("class") or "")
